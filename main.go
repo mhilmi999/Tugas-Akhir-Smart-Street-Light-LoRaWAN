@@ -28,7 +28,7 @@ func setup() (*gorm.DB, config.Conf, *gin.Engine){
 
 	cookieStore := cookie.NewStore([]byte(conf.App.Secret_key))
 	router.Use(sessions.Sessions("homesmartstreetlight", cookieStore))
-	router.HTMLRender = html.Render("./public")
+	router.HTMLRender = html.Render("./public/templates")
 
 	//Error Handling for 404 Not Found Page and Method Not Allowed
 	router.NoRoute(error.PageNotFound())
@@ -44,5 +44,5 @@ func main() {
 
 	router := routesV1.Init(setup())
 
-	router.Run(":	" + conf.App.Port)
+	router.Run(":" + conf.App.Port)
 }
