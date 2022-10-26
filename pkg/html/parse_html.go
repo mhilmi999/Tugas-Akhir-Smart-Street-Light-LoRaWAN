@@ -1,7 +1,6 @@
 package html
 
 import (
-	"log"
 	"path/filepath"
 
 	"github.com/gin-contrib/multitemplate"
@@ -9,13 +8,16 @@ import (
 
 func Render(templatesDir string) multitemplate.Renderer{
 	r := multitemplate.NewRenderer()
-	layouts, err := filepath.Glob(templatesDir + "layouts/*.tmpl")
-	
+
+	layouts, err := filepath.Glob(templatesDir + "/layouts/*")
 	if err != nil{
-		log.Println(err.Error())
+		panic(err.Error())
 	}
 
 	includes, err := filepath.Glob(templatesDir + "/**/*")
+	if err != nil{
+		panic(err.Error())
+	}
 
 	for _, include := range includes{
 		layoutCopy := make([]string, len(layouts))
