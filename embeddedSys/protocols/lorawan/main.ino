@@ -1,10 +1,11 @@
-/**
-   ABP device
-   LoRaWAN class C
-*/
 #include <lorawan.h>
-#include <HardwareSerial.h>
-#include <PZEM004T.h>
+#include <PZEM004Tv30.h>
+
+#if defined(ESP32)
+PZEM004Tv30 pzem(Serial2, 16, 17);
+#else
+PZEM004Tv30 pzem(Serial2);
+#endif
 
 //ABP Credentials
 const char *devAddr = "368438d3";
@@ -29,13 +30,6 @@ const sRFM_pins RFM_pins = {
   .DIO0 = 2,
   .DIO1 = 4,
 };
-
-HardwareSerial Serial2(2);     // Use hwserial UART2 at pins IO-16 (RX2) and IO-17 (TX2)
-PZEM004T pzem(&Serial2);
-IPAddress ip(192,168,1,1);
-
-int relayPin = 4;
-int relayStat = 1; // 1 = relay is off, 0 = relay is on
 
 void setup() {
   // Setup loraid access
@@ -66,27 +60,15 @@ void setup() {
   lora.setNwkSKey(nwkSKey);
   lora.setAppSKey(appSKey);
   lora.setDevAddr(devAddr);
-  
-  pinMode(relayPin, OUTPUT);// define a pin as output for relay
-  digitalWrite(relayPin, relayStat);//initial state either ON or OFF
-  
-  while (true) {
-      Serial.println("Connecting to PZEM...");
-      if(pzem.setAddress(ip))
-        break;
-      delay(1000);
-   }
-   
 }
 
 void loop() {
-  lorawanProtocols();
-  pzemSensor();
-  lampControl();
+  lorawanrxtx();
+  pzemsensor();  
 }
 
-void lorawanProtocols(){
-    // Check interval overflow
+void lorawanrxtx(){
+  // Check interval overflow
   if (millis() - previousMillis > interval) {
     previousMillis = millis();
 
@@ -159,33 +141,43 @@ void lorawanProtocols(){
   }
 }
 
-void pzemSensor(){
-    float v = pzem.voltage(ip);
-  if (v < 0.0) v = 0.0;
-   Serial.print(v);Serial.print("V; ");
+void pzem(){
+    Serial.print("Custom Address:");
+    Serial.println(pzem.readAddress(), HEX);
 
-  float i = pzem.current(ip);
-   if(i >= 0.0){ Serial.print(i);Serial.print("A; "); }
+    // Read the data from the sensor
+    float voltage = pzem.voltage();
+    float current = pzem.current();
+    float power = pzem.power();
+    float energy = pzem.energy();
+    float frequency = pzem.frequency();
+    float pf = pzem.pf();
 
-  float p = pzem.power(ip);
-   if(p >= 0.0){ Serial.print(p);Serial.print("W; "); }
+    // Check if the data is valid
+    if(isnan(voltage)){
+        Serial.println("Error reading voltage");
+    } else if (isnan(current)) {
+        Serial.println("Error reading current");
+    } else if (isnan(power)) {
+        Serial.println("Error reading power");
+    } else if (isnan(energy)) {
+        Serial.println("Error reading energy");
+    } else if (isnan(frequency)) {
+        Serial.println("Error reading frequency");
+    } else if (isnan(pf)) {
+        Serial.println("Error reading power factor");
+    } else {
 
-  float e = pzem.energy(ip);
-   if(e >= 0.0){ Serial.print(e);Serial.print("Wh; "); }
+        // Print the values to the Serial console
+        Serial.print("Voltage: ");      Serial.print(voltage);      Serial.println("V");
+        Serial.print("Current: ");      Serial.print(current);      Serial.println("A");
+        Serial.print("Power: ");        Serial.print(power);        Serial.println("W");
+        Serial.print("Energy: ");       Serial.print(energy,3);     Serial.println("kWh");
+        Serial.print("Frequency: ");    Serial.print(frequency, 1); Serial.println("Hz");
+        Serial.print("PF: ");           Serial.println(pf);
 
-  Serial.println();
+    }
 
-  delay(3000);
-}
-
-void lampControl(){
-  if (relayStat) {
-    digitalWrite(relayPin, HIGH);
-    relayStat = 0;
-  }
-  Serial.println("Lampu menyala");
-//   else {
-//     digitalWrite(relayPin, LOW);
-//     relayStat = 1;
-//   }
+    Serial.println();
+    delay(2000);
 }

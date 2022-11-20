@@ -1,50 +1,58 @@
-#include <HardwareSerial.h>
-#include <PZEM004T.h>
+#include <PZEM004Tv30.h>
 
-/*
-   An example on how to use ESP32 hardware serial with PZEM004T
+/* Hardware Serial2 is only available on certain boards.
+ * For example the Arduino MEGA 2560
 */
-
-HardwareSerial Serial2(2);     // Use hwserial UART2 at pins IO-16 (RX2) and IO-17 (TX2)
-PZEM004T pzem(&Serial2);
-IPAddress ip(192,168,1,1);
-
-/*
- * PDAControl
- * Documentation PDAControl English:
- * http://pdacontrolen.com/meter-pzem-004t-with-arduino-esp32-esp8266-python-raspberry-pi/
- * Documentacion PDAControl Español:
- * http://pdacontroles.com/medidor-pzem-004t-con-arduino-esp32-esp8266-python-raspberry-pi/
- * Video Tutorial : https://youtu.be/qt32YT_1oH8
- * 
- */
+#if defined(ESP32)
+PZEM004Tv30 pzem(Serial2, 16, 17);
+#else
+PZEM004Tv30 pzem(Serial2);
+#endif
 
 void setup() {
-   Serial.begin(115200);
-   while (true) {
-      Serial.println("Connecting to PZEM...");
-      if(pzem.setAddress(ip))
-        break;
-      delay(1000);
-   }
+    Serial.begin(115200);
+
+    // Uncomment in order to reset the internal energy counter
+    // pzem.resetEnergy()
 }
 
-void loop() {
+void loop() {    
+    Serial.print("Custom Address:");
+    Serial.println(pzem.readAddress(), HEX);
 
-  float v = pzem.voltage(ip);
-  if (v < 0.0) v = 0.0;
-   Serial.print(v);Serial.print("V; ");
+    // Read the data from the sensor
+    float voltage = pzem.voltage();
+    float current = pzem.current();
+    float power = pzem.power();
+    float energy = pzem.energy();
+    float frequency = pzem.frequency();
+    float pf = pzem.pf();
 
-  float i = pzem.current(ip);
-   if(i >= 0.0){ Serial.print(i);Serial.print("A; "); }
+    // Check if the data is valid
+    if(isnan(voltage)){
+        Serial.println("Error reading voltage");
+    } else if (isnan(current)) {
+        Serial.println("Error reading current");
+    } else if (isnan(power)) {
+        Serial.println("Error reading power");
+    } else if (isnan(energy)) {
+        Serial.println("Error reading energy");
+    } else if (isnan(frequency)) {
+        Serial.println("Error reading frequency");
+    } else if (isnan(pf)) {
+        Serial.println("Error reading power factor");
+    } else {
 
-  float p = pzem.power(ip);
-   if(p >= 0.0){ Serial.print(p);Serial.print("W; "); }
+        // Print the values to the Serial console
+        Serial.print("Voltage: ");      Serial.print(voltage);      Serial.println("V");
+        Serial.print("Current: ");      Serial.print(current);      Serial.println("A");
+        Serial.print("Power: ");        Serial.print(power);        Serial.println("W");
+        Serial.print("Energy: ");       Serial.print(energy,3);     Serial.println("kWh");
+        Serial.print("Frequency: ");    Serial.print(frequency, 1); Serial.println("Hz");
+        Serial.print("PF: ");           Serial.println(pf);
 
-  float e = pzem.energy(ip);
-   if(e >= 0.0){ Serial.print(e);Serial.print("Wh; "); }
+    }
 
-  Serial.println();
-
-  delay(3000);
+    Serial.println();
+    delay(2000);
 }
