@@ -7,7 +7,7 @@ import (
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/app/database"
 	routesV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/routes"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/pkg/html"
-	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/pkg/http-error"
+	// "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/pkg/http-error"
 
 	"github.com/gin-contrib/cors"
 	// "github.com/gin-contrib/sessions"
@@ -31,8 +31,8 @@ func setup() (*gorm.DB, config.Conf, *gin.Engine){
 	router.HTMLRender = html.Render("./public/templates")
 
 	//Error Handling for 404 Not Found Page and Method Not Allowed
-	router.NoRoute(error.PageNotFound())
-	router.NoMethod(error.NoMethod())
+	// router.NoRoute(error.PageNotFound())
+	// router.NoMethod(error.NoMethod())
 	return db, conf, router
 }
 
