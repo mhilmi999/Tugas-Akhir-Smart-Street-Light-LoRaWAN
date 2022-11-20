@@ -7,15 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Smart Street Light Tugas Akhir Hilmi</title>
 </head>
-<header>
-    <h1>Home of Smart Street Light Tugas Akhir Hilmi</h1>
-</header>
 
 <body>
-    {{ template "content" .}}
+    {{ template "navbar" . }} {{ template "sidebar" .}} {{ template "content" .}}
 </body>
-<footer>
-    <p>&copy; mhilmi999 2022</p>
-</footer>
+{{ template "footer" . }}
 
 </html>
