@@ -7,7 +7,7 @@
         <li class="nav-item">
             <a class="nav-link " href="/">
                 <i class="bi bi-grid"></i>
-                <span>Home</span>
+                <span>Dashboard</span>
             </a>
         </li>
         <!-- End Home Nav -->
@@ -29,6 +29,29 @@
         <!-- End F.A.Q Page Nav -->
 
     </ul>
+    <div class="container-fluid profile-menu">
+        <div class="profile-menu-content flex-row">
+            <div class="profile-picture">
+                <img>
+            </div>
+            <div class="row">
+                <div class="profile-user col-10">
+                    <div class="profile-name">
+                        Selamat Datang {{ .UserName }}!
+                    </div>
+                </div>
+                <div class="col-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out">
+                        <a href="/logout" style="color: #000000;" data-bs-toggle="tooltip" data-bs-placement="right" title="Logout">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </a>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </aside>
 <!-- End Sidebar-->

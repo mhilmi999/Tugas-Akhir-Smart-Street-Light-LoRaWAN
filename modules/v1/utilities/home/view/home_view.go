@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/repository"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/service"
 
@@ -21,7 +22,7 @@ var hari = [...]string{
 
 var bulan = [...]string{
 	"Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
-	"Jul", "Agu", "Sep", "Okt", "Nop", "Des",
+	"Jul", "Agu", "Sep", "Okt", "Nov", "Des",
 }
 
 func NewHomeView(homeService service.Service) *homeView {
@@ -41,9 +42,12 @@ func Tanggal(t time.Time) string {
 }
 
 func (h *homeView) Index(c *gin.Context) {
+	session := sessions.Default(c)
 	c.HTML(http.StatusOK, "home", gin.H{
-		"title":   "Home SSL",
-		"timeNow": Tanggal(time.Now()),
+		"title":				"Home SSL",
+		"timeNow": 				Tanggal(time.Now()),
+		"UserID":				session.Get("userID"),
+		"UserName":				session.Get("userName"),
 	})
 }
 

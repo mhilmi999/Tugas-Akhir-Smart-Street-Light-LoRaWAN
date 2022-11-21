@@ -11,20 +11,20 @@ import (
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/user/service"
 )
 
-type UserHandler interface{
+type UserHandler interface {
 	Register(c *gin.Context)
 	Login(c *gin.Context)
 }
 
-type userHandler struct{
+type userHandler struct {
 	userService service.Service
 }
 
-func NewUserHandler (userService service.Service) *userHandler{
+func NewUserHandler(userService service.Service) *userHandler {
 	return &userHandler{userService}
 }
 
-func (n *userHandler) Register(c *gin.Context){
+func (n *userHandler) Register(c *gin.Context) {
 	var input models.RegisterInput
 	fmt.Println(input)
 	err := c.ShouldBind(&input)
@@ -38,7 +38,7 @@ func (n *userHandler) Register(c *gin.Context){
 	c.Redirect(http.StatusFound, "/login")
 }
 
-func (n *userHandler) Login(c *gin.Context){
+func (n *userHandler) Login(c *gin.Context) {
 	session := sessions.Default(c)
 	var input models.LoginInput
 	err := c.ShouldBind(&input)
@@ -46,7 +46,7 @@ func (n *userHandler) Login(c *gin.Context){
 		log.Println(err)
 		session.AddFlash("Format email salah")
 		c.HTML(http.StatusOK, "login", gin.H{
-			"title" : "Login SSL",
+			"title":    "Login SSL",
 			"flashses": session.Flashes(),
 		})
 		return
@@ -65,4 +65,17 @@ func (n *userHandler) Login(c *gin.Context){
 	session.Save()
 
 	c.Redirect(http.StatusFound, "/home")
+}
+
+func (h *userHandler) Logout(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Clear()
+	session.Save()
+
+	http.SetCookie(c.Writer, &http.Cookie{
+		Name:   "message",
+		MaxAge: -1,
+	})
+
+	c.Redirect(http.StatusFound, "/login")
 }
