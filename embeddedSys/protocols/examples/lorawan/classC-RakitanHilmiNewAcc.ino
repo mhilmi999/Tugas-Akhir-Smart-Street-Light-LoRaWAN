@@ -1,11 +1,16 @@
-#include <lorawan.h>
-#include <PZEM004Tv30.h>
+/**
+   Example of ABP device
+   Authors:
+          Ivan Moreno
+          Eduardo Contreras
+    June 2019
 
-#if defined(ESP32)
-PZEM004Tv30 pzem(Serial2, 16, 17);
-#else
-PZEM004Tv30 pzem(Serial2);
-#endif
+   This code is beerware; if you see me (or any other collaborator
+   member) at the local, and you've found our code helpful,
+   please buy us a round!
+   Distributed as-is; no warranty is given.
+*/
+#include <lorawan.h>
 
 //ABP Credentials
 const char *devAddr = "36009001";
@@ -25,6 +30,10 @@ int port, channel, freq;
 bool newmessage = false;
 
 const sRFM_pins RFM_pins = {
+//  .CS = 5,
+//  .RST = 0,
+//  .DIO0 = 27,
+//  .DIO1 = 2,
   .CS = 5,
   .RST = 17,
   .DIO0 = 2,
@@ -63,28 +72,16 @@ void setup() {
 }
 
 void loop() {
-  pzemsensor();  
-  lorawanrxtx();
-}
-
-void lorawanrxtx(){
   // Check interval overflow
   if (millis() - previousMillis > interval) {
     previousMillis = millis();
 
     sprintf(myStr, "Lora Counter-%d", counter++);
-    
-    Serial.print("Custom Address:");
-    Serial.println(pzem.readAddress(), HEX);
-
-    // Read the data from the sensor
-    float voltage = pzem.voltage();
-    volt = dtostrf(voltage, 6, 2, myStr)
 
     
     Serial.print("Sending: ");
-    Serial.println(voltage, current, power, energy, frequency, pf);
-    lora.sendUplink(volt, strlen(volt), 0);
+    Serial.println(myStr);
+    lora.sendUplink(myStr, strlen(myStr), 0);
     port = lora.getFramePortTx();
     channel = lora.getChannel();
     freq = lora.getChannelFreq(channel);
@@ -146,45 +143,5 @@ void lorawanrxtx(){
       Serial.print(F("Freq: "));    Serial.println(freq);Serial.println(" ");
     }
   }
-}
 
-void pzem(){
-    Serial.print("Custom Address:");
-    Serial.println(pzem.readAddress(), HEX);
-
-    // Read the data from the sensor
-    float voltage = pzem.voltage();
-    float current = pzem.current();
-    float power = pzem.power();
-    float energy = pzem.energy();
-    float frequency = pzem.frequency();
-    float pf = pzem.pf();
-
-    // Check if the data is valid
-    if(isnan(voltage)){
-        Serial.println("Error reading voltage");
-    } else if (isnan(current)) {
-        Serial.println("Error reading current");
-    } else if (isnan(power)) {
-        Serial.println("Error reading power");
-    } else if (isnan(energy)) {
-        Serial.println("Error reading energy");
-    } else if (isnan(frequency)) {
-        Serial.println("Error reading frequency");
-    } else if (isnan(pf)) {
-        Serial.println("Error reading power factor");
-    } else {
-
-        // Print the values to the Serial console
-        Serial.print("Voltage: ");      Serial.print(voltage);      Serial.println("V");
-        Serial.print("Current: ");      Serial.print(current);      Serial.println("A");
-        Serial.print("Power: ");        Serial.print(power);        Serial.println("W");
-        Serial.print("Energy: ");       Serial.print(energy,3);     Serial.println("kWh");
-        Serial.print("Frequency: ");    Serial.print(frequency, 1); Serial.println("Hz");
-        Serial.print("PF: ");           Serial.println(pf);
-
-    }
-
-    Serial.println();
-    delay(2000);
 }

@@ -44,10 +44,10 @@ func Tanggal(t time.Time) string {
 func (h *homeView) Index(c *gin.Context) {
 	session := sessions.Default(c)
 	c.HTML(http.StatusOK, "home", gin.H{
-		"title":				"Home SSL",
-		"timeNow": 				Tanggal(time.Now()),
-		"UserID":				session.Get("userID"),
-		"UserName":				session.Get("userName"),
+		"title":    "Home SSL",
+		"timeNow":  Tanggal(time.Now()),
+		"UserID":   session.Get("userID"),
+		"UserName": session.Get("userName"),
 	})
 }
 
@@ -60,5 +60,15 @@ func (h *homeView) Login(c *gin.Context) {
 func (h *homeView) Register(c *gin.Context) {
 	c.HTML(http.StatusOK, "register", gin.H{
 		"title": "Register SSL",
+	})
+}
+
+func (h *homeView) ListDevice(c *gin.Context) {
+	session := sessions.Default(c)
+	c.HTML(http.StatusOK, "list_device", gin.H{
+		"title":    "List Device SSL",
+		"timeNow":  Tanggal(time.Now()),
+		"UserID":   session.Get("userID"),
+		"UserName": session.Get("userName"),
 	})
 }

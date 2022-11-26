@@ -33,6 +33,7 @@ func ManualRender(tmpDir string) multitemplate.Renderer {
 	r.AddFromFiles("login", tmpDir+"home/home_login.html", tmpDir+"layouts/footer.html")
 	r.AddFromFiles("register", tmpDir+"home/home_register.html", tmpDir+"layouts/footer.html")
 	r.AddFromFiles("home", tmpDir+"home/home_index.html", tmpDir+"layouts/header.html", tmpDir+"layouts/navbar.html", tmpDir+"layouts/sidebar.html", tmpDir+"layouts/footer.html")
+	r.AddFromFiles("list_device", tmpDir+"home/home_list_device.html", tmpDir+"layouts/header.html", tmpDir+"layouts/navbar.html", tmpDir+"layouts/sidebar.html", tmpDir+"layouts/footer.html")
 
 	return r
 }

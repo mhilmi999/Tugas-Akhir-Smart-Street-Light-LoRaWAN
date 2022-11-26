@@ -7,6 +7,8 @@ PZEM004Tv30 pzem(Serial2, 16, 17);
 PZEM004Tv30 pzem(Serial2);
 #endif
 
+#define N_ITEMS
+
 //ABP Credentials
 const char *devAddr = "36009001";
 const char *nwkSKey = "01fe7c50a39803d00000000000000000";
@@ -19,6 +21,12 @@ unsigned long previousMillis = 0;  // will store last time message sent
 unsigned int counter = 0;     // message counter
 
 char myStr[50];
+char Volt [50];
+char Cur  [50];
+char Pwr  [50];
+char Egy  [50];
+char Frq  [50];
+char Pwf  [50];
 byte outStr[255];
 byte recvStatus = 0;
 int port, channel, freq;
@@ -63,7 +71,6 @@ void setup() {
 }
 
 void loop() {
-  pzemsensor();  
   lorawanrxtx();
 }
 
@@ -79,18 +86,39 @@ void lorawanrxtx(){
 
     // Read the data from the sensor
     float voltage = pzem.voltage();
-    volt = dtostrf(voltage, 6, 2, myStr)
+    float current = pzem.current();
+    float power = pzem.power();
+    float energy = pzem.energy();
+    float frequency = pzem.frequency();
 
-    
+//    Convert to Char
+    char* volt = dtostrf(v0lt, 6, 2, Volt);
+    char* cur = dtostrf(cu2, 6, 2, Cur);
+    char* pwr = dtostrf(p0w, 6, 2, Pwr);
+    char* egy = dtostrf(en6, 6, 2, Egy);
+    char* frq = dtostrf(fq, 6, 2, Frq);
+
+    strcpy(myStr,volt);
+    strcat(myStr,cur);
+    strcat(myStr,pwr);
+    strcat(myStr,egy);
+    strcat(myStr,frq);
+
+        
     Serial.print("Sending: ");
-    Serial.println(voltage, current, power, energy, frequency, pf);
-    lora.sendUplink(volt, strlen(volt), 0);
+    Serial.println(myStr);
+    lora.sendUplink(myStr, strlen(myStr), 0);
     port = lora.getFramePortTx();
     channel = lora.getChannel();
     freq = lora.getChannelFreq(channel);
     Serial.print(F("fport: "));    Serial.print(port);Serial.print(" ");
     Serial.print(F("Ch: "));    Serial.print(channel);Serial.print(" ");
     Serial.print(F("Freq: "));    Serial.print(freq);Serial.println(" ");
+    Serial.print("Voltage: ");      Serial.print(voltage);      Serial.println("V");
+    Serial.print("Current: ");      Serial.print(current);      Serial.println("A");
+    Serial.print("Power: ");        Serial.print(power);        Serial.println("W");
+    Serial.print("Energy: ");       Serial.print(energy,3);     Serial.println("kWh");
+    Serial.print("Frequency: ");    Serial.print(frequency, 1); Serial.println("Hz");
 
   }
 
@@ -146,45 +174,4 @@ void lorawanrxtx(){
       Serial.print(F("Freq: "));    Serial.println(freq);Serial.println(" ");
     }
   }
-}
-
-void pzem(){
-    Serial.print("Custom Address:");
-    Serial.println(pzem.readAddress(), HEX);
-
-    // Read the data from the sensor
-    float voltage = pzem.voltage();
-    float current = pzem.current();
-    float power = pzem.power();
-    float energy = pzem.energy();
-    float frequency = pzem.frequency();
-    float pf = pzem.pf();
-
-    // Check if the data is valid
-    if(isnan(voltage)){
-        Serial.println("Error reading voltage");
-    } else if (isnan(current)) {
-        Serial.println("Error reading current");
-    } else if (isnan(power)) {
-        Serial.println("Error reading power");
-    } else if (isnan(energy)) {
-        Serial.println("Error reading energy");
-    } else if (isnan(frequency)) {
-        Serial.println("Error reading frequency");
-    } else if (isnan(pf)) {
-        Serial.println("Error reading power factor");
-    } else {
-
-        // Print the values to the Serial console
-        Serial.print("Voltage: ");      Serial.print(voltage);      Serial.println("V");
-        Serial.print("Current: ");      Serial.print(current);      Serial.println("A");
-        Serial.print("Power: ");        Serial.print(power);        Serial.println("W");
-        Serial.print("Energy: ");       Serial.print(energy,3);     Serial.println("kWh");
-        Serial.print("Frequency: ");    Serial.print(frequency, 1); Serial.println("Hz");
-        Serial.print("PF: ");           Serial.println(pf);
-
-    }
-
-    Serial.println();
-    delay(2000);
 }
