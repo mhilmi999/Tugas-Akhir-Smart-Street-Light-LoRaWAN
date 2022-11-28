@@ -75,6 +75,10 @@ github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 h1:ZqeYNhU3OH
 github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9Gz0M=
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
+github.com/ngrok/ngrok-api-go v0.0.0-20210516044414-68ecaad15d8f h1:9tZEDiIGej8pUiDdh230LEp/B8tgXk+JA/Xq9oHIVzY=
+github.com/ngrok/ngrok-api-go v0.0.0-20210516044414-68ecaad15d8f/go.mod h1:2f8OZusDsJy3q8OGRSr1CzmK5pze3Cu+3rSr8ZQMVZA=
+github.com/ngrok/ngrok-api-go/v4 v4.0.1 h1:VUf6FtDvfT4N7gqyCyilcnI0PMdFNSiCCtxyDSiFOtY=
+github.com/ngrok/ngrok-api-go/v4 v4.0.1/go.mod h1:WobrY7FusLhKZRShryNqFLhX1X33A0BS7I/bPTy8wUM=
 github.com/pelletier/go-toml/v2 v2.0.1 h1:8e3L2cCQzLFi2CR4g7vGFuFxX7Jl1kKX8gW+iV0GUKU=
 github.com/pelletier/go-toml/v2 v2.0.1/go.mod h1:r9LEWfGN8R5k0VXJ+0BkIe7MYkRdwZOjgMj2KwnJFUo=
 github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e/go.mod h1:pJLUxLENpZxwdsKMEsNbx1VGcRFpLqf3715MtcvvzbA=

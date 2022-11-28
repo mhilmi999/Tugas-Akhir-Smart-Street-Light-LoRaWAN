@@ -30,13 +30,14 @@ func Init(db *gorm.DB, conf config.Conf, router *gin.Engine) *gin.Engine {
 	// Routing to website service
 	home := router.Group("/")
 	home.GET("", middlewares.IsLogin(), homeViewV1.Index)
-	home.GET("/home", middlewares.IsLogin() ,homeViewV1.Index)
+	home.GET("/home", middlewares.IsLogin(), homeViewV1.Index)
 	home.GET("/login", homeViewV1.Login)
 	home.GET("/register", homeViewV1.Register)
 	home.GET("/logout", userHandlerV1.Logout)
 	home.GET("/list-device", homeViewV1.ListDevice)
 	home.POST("/login", userHandlerV1.Login)
 	home.POST("register", userHandlerV1.Register)
+	home.GET("/antares-data", userHandlerV1.ReceivedData)
 	router = ParseTmpl(router)
 
 	return router

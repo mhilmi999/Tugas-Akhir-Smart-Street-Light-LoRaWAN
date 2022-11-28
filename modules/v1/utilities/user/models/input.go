@@ -9,3 +9,20 @@ type RegisterInput struct {
 	Email    string `json:"email" form:"email" binding:"required,email"`
 	Password string `json:"password" form:"password" binding:"required"`
 }
+
+type Received struct{
+	First AntaresDetail `json:"m2m:cin"`
+}
+
+type AntaresDetail struct{
+	Rn  string `json:"rn"`
+	Ty  int    `json:"ty"`
+	Ri  string `json:"ri"`
+	Pi  string `json:"pi"`
+	Ct  string `json:"ct"`
+	Lt  string `json:"lt"`
+	St  int    `json:"st"`
+	Cnf string `json:"cnf"`
+	Cs  int    `json:"cs"`
+	Con string `json:"con"`
+}
