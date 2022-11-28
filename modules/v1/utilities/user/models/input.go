@@ -24,5 +24,11 @@ type AntaresDetail struct{
 	St  int    `json:"st"`
 	Cnf string `json:"cnf"`
 	Cs  int    `json:"cs"`
-	Con string `json:"con"`
+	Con DataReceived `json:"con"`
+}
+
+type DataReceived struct{
+	Voltage string `json:"voltage"`
+	Current string `json:"current"`
+	Power   string `json:"power"`
 }
