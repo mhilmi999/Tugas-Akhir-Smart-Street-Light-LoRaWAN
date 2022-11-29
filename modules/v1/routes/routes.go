@@ -4,10 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/app/config"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/app/middlewares"
+	homeHandlerV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/handlers"
+	homeServiceV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/service"
+	homeRepositoryV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/repository"
 	homeViewV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/view"
 	userHandlerV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/user/handlers"
-	userRepositoryV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/user/repository"
 	userServiceV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/user/service"
+	userRepositoryV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/user/repository"
 	pkgHtml "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/pkg/html"
 	"gorm.io/gorm"
 )
@@ -23,6 +26,9 @@ func ParseTmpl(router *gin.Engine) *gin.Engine {
 }
 
 func Init(db *gorm.DB, conf config.Conf, router *gin.Engine) *gin.Engine {
+	homeRepositoryV1 := homeRepositoryV1.NewRepository(db)
+	homeServiceV1 := homeServiceV1.NewService(homeRepositoryV1)
+	homeHandlerV1 := homeHandlerV1.NewHomeHandler(homeServiceV1)
 	homeViewV1 := homeViewV1.View(db)
 	userRepositoryV1 := userRepositoryV1.NewRepository(db)
 	userServiceV1 := userServiceV1.NewService(userRepositoryV1)
@@ -37,7 +43,8 @@ func Init(db *gorm.DB, conf config.Conf, router *gin.Engine) *gin.Engine {
 	home.GET("/list-device", homeViewV1.ListDevice)
 	home.POST("/login", userHandlerV1.Login)
 	home.POST("register", userHandlerV1.Register)
-	home.GET("/antares-data", userHandlerV1.ReceivedData)
+	//home.GET("/antares-data", userHandlerV1.ReceivedData)
+	home.GET("/antares-data", homeHandlerV1.ReceivedData)
 	router = ParseTmpl(router)
 
 	return router

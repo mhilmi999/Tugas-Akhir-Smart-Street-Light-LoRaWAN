@@ -1,12 +1,14 @@
 package home
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/repository"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/service"
 	"gorm.io/gorm"
 )
 
 type HomeHandler interface{
+	ReceivedData(c *gin.Context)
 }
 
 type homeHandler struct{
