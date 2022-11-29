@@ -17,7 +17,8 @@ type Service interface {
 	// GetId(id string) int
 	// GetData(input string) string
 	// DataCheck(id int, getData string) int
-	GetLatestData(token string)(models.Received, error)
+	GetLatestCon(token string)(models.Received, error)
+	GetDatafromCon(input string)(models.DataReceived, error)
 }
 
 type service struct {
@@ -64,9 +65,16 @@ func (n *service) Login(input models.LoginInput) (models.User, error) {
 	return user, nil
 }
 
-func (n *service) GetLatestData(token string)(models.Received, error){
-	getLatestData, err := n.repository.GetLatestData(token)
+func (n *service) GetLatestCon(token string)(models.Received, error){
+	getLatestData, err := n.repository.GetLatestCon(token)
 	return getLatestData, err
+}
+
+func(n *service) GetDatafromCon(input string)(models.DataReceived, error){
+	var data models.DataReceived
+	// fmt.Println(input)
+	// fmt.Println(input[3])
+	return data, nil
 }
 
 // func (n *service) GetId(id string) int {

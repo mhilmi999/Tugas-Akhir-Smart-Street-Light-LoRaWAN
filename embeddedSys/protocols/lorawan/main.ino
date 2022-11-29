@@ -17,7 +17,7 @@
   unsigned long previousMillis = 0;  // will store last time message sent
   unsigned int counter = 0;     // message counter
 
-  char myStr[50];
+  char myStr[100];
   char temp[50];
   byte outStr[255];
   byte recvStatus = 0;
@@ -83,8 +83,8 @@
       float power = getPower();
           
       Serial.print("Sending: ");
-      dataSend = "{\"Voltage\": " + String(voltage,2) + ", \"Current\": " + String(current,3) +", \"Power\": " + String(power,2) +"}";
-      dataSend.toCharArray(myStr,50);
+      dataSend = "{\"volt\": " + String(voltage,2) + ", \"cur\": " + String(current,3) +", \"pwr\": " + String(power,2) +"}";
+      dataSend.toCharArray(myStr,100);
       Serial.println(myStr);
       lora.sendUplink(myStr, strlen(myStr), 0);
       port = lora.getFramePortTx();

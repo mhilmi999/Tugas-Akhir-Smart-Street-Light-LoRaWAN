@@ -10,22 +10,22 @@ import (
 	"gorm.io/gorm"
 )
 
-type Repository interface{
+type Repository interface {
 	Save(user models.User) (models.User, error)
-	FindByEmail(email string)(models.User, error)
+	FindByEmail(email string) (models.User, error)
 	// GetId(id string) (int, error)
-	GetLatestData(token string)(models.Received, error)
+	GetLatestCon(token string) (models.Received, error)
 }
 
-type repository struct{
+type repository struct {
 	db *gorm.DB
 }
 
-func NewRepository(db *gorm.DB) *repository{
+func NewRepository(db *gorm.DB) *repository {
 	return &repository{db}
 }
 
-func (n *repository) Save(user models.User) (models.User, error){
+func (n *repository) Save(user models.User) (models.User, error) {
 	err := n.db.Create(&user).Error
 	if err != nil {
 		return user, err
@@ -34,7 +34,7 @@ func (n *repository) Save(user models.User) (models.User, error){
 	return user, nil
 }
 
-func (n *repository) FindByEmail(email string)(models.User, error){
+func (n *repository) FindByEmail(email string) (models.User, error) {
 	var user models.User
 	err := n.db.Where("email = ?", email).Find(&user).Error
 	if err != nil {
@@ -50,11 +50,10 @@ func (n *repository) FindByEmail(email string)(models.User, error){
 // 	return idData, err
 // }
 
-func (n *repository) GetLatestData(token string)(models.Received, error){
+func (n *repository) GetLatestCon(token string) (models.Received, error) {
 	data := models.Received{}
 
-	client := http.Client{
-	}
+	client := http.Client{}
 	req, err := http.NewRequest("GET", "https://platform.antares.id:8443/~/antares-cse/antares-id/SmartStreetLight/tugasAkhir/la", nil)
 	req.Header.Set("X-M2M-Origin", token)
 	req.Header.Set("Content-Type", "application/json;ty=4")

@@ -1,9 +1,11 @@
 package user
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+
 	// "strings"
 
 	"github.com/gin-contrib/sessions"
@@ -83,7 +85,7 @@ func (n *userHandler) Logout(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/login")
 }
 
-func (n *userHandler) ReceivedData(c *gin.Context){
+func (n *userHandler) ReceivedData(c *gin.Context) {
 	// var input models.Received
 	// if err := c.ShouldBindJSON(&input); err != nil{
 	// 	response := helper.APIRespon("Error inputnya invalid", 220, "error", nil)
@@ -107,10 +109,18 @@ func (n *userHandler) ReceivedData(c *gin.Context){
 	// }
 
 	token := "01fe7c50a39803d0:93a1cf61893c1605"
-	getLatestData, err := n.userService.GetLatestData(token)
-	if err !=nil{
+	getLatestCon, err := n.userService.GetLatestCon(token)
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(getLatestData)
+	fmt.Println(getLatestCon)
+	var dataCon models.ConnectionDat
+	json.Unmarshal([]byte(getLatestCon.First.Con), &dataCon)
+	// var dataCon2 models.DataReceived
+	// json.Unmarshal(dataCon, &dataCon2)
+	fmt.Println(dataCon.Data)
+	// fmt.Println(dataCon2)
+	// getDatafromCon, err := n.userService.GetDatafromCon(getLatestCon.First.Con)
+	// fmt.Println(getDatafromCon)
 }
