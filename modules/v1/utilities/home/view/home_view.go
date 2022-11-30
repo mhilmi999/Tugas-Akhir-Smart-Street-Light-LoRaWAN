@@ -76,9 +76,17 @@ func (h *homeView) Register(c *gin.Context) {
 
 func (h *homeView) ListDevice(c *gin.Context) {
 	session := sessions.Default(c)
+	getListDevice, err := h.homeService.GetListDevice()
+	if err != nil{
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(getListDevice)
+
 	c.HTML(http.StatusOK, "list_device", gin.H{
 		"title":    "List Device SSL",
 		"timeNow":  Tanggal(time.Now()),
+		"tableDeviceData" : getListDevice,
 		"UserID":   session.Get("userID"),
 		"UserName": session.Get("userName"),
 	})

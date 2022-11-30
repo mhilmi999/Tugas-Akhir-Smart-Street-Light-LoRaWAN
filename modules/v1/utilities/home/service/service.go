@@ -12,6 +12,7 @@ type Service interface{
 	GetLatestCon(token string)(models.Received, error)
 	GetDatafromCon(input string, DeviceId string)(models.ConnectionDat, error)
 	GetChartData() ([]models.DeviceChartData, error) 
+	GetListDevice()([]models.ListDevice, error)
 }
 
 type service struct{
@@ -44,4 +45,9 @@ func(n *service) GetDatafromCon(input string, DeviceId string)(models.Connection
 func (n *service) GetChartData() ([]models.DeviceChartData, error) {
 	chartData, err := n.repository.GetChartData()
 	return chartData, err
+}
+
+func (n *service) GetListDevice()([]models.ListDevice, error){
+	listDevice, err := n.repository.GetListDevice()
+	return listDevice, err
 }

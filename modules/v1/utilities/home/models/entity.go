@@ -8,3 +8,11 @@ type DeviceChartData struct {
 	Power  float64 
 	History_date time.Time
 }
+
+type ListDevice struct{
+	Device_id string
+	Voltage float64
+	Ampere float64
+	Power float64
+	Device_cons int
+}

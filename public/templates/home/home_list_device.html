@@ -9,7 +9,7 @@
             <h1>List of Device</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
                     <li class="breadcrumb-item active">List of Device</li>
                 </ol>
             </nav>
@@ -33,27 +33,25 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">Device-ID</th>
+                                                <th scope="col">Voltage</th>
+                                                <th scope="col">Current</th>
+                                                <th scope="col">Power</th>
                                                 <th scope="col">Status</th>
-                                                <th scope="col">Power Consumption Monthly</th>
-                                                <th scope="col">Total Consumption Power</th>
-                                                <th scope="col">Last Updated</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {{ range $i, $ld := .tableDeviceData }}
                                             <tr>
-                                                <th scope="row"><a href="#">#2457</a></th>
-                                                <td>Brandon Jacob</td>
-                                                <td><a href="#" class="text-primary">At praesentium minu</a></td>
-                                                <td>$64</td>
-                                                <td><span class="badge bg-success">Approved</span></td>
+                                                <th scope="row">
+                                                    <a href="#">{{ $ld.Device_id }}</a>
+                                                </th>
+                                                <td>{{ $ld.Voltage }}</td>
+                                                <td><a href="#" class="text-primary">{{ $ld.Ampere }}</a></td>
+                                                <td>{{ $ld.Power }}</td>
+                                                <td><span class="badge bg-success">{{ $ld.Device_cons }}</span></td>
                                             </tr>
-                                            <tr>
-                                                <th scope="row"><a href="#">#2147</a></th>
-                                                <td>Bridie Kessler</td>
-                                                <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
-                                                <td>$47</td>
-                                                <td><span class="badge bg-warning">Pending</span></td>
-                                            </tr>
+                                            {{ end }}
+
 
                                         </tbody>
                                     </table>
