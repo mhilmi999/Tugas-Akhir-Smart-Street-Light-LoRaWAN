@@ -5,6 +5,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/models"
+	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/pkg/helpers"
 )
 
 func (n *homeHandler) ReceivedData(c *gin.Context) {
@@ -22,4 +24,20 @@ func (n *homeHandler) ReceivedData(c *gin.Context) {
 		return
 	}
 	fmt.Println("Sukses masuk data ke db")
+}
+
+func (n *homeHandler) SubscribeWebhook(c *gin.Context) {
+	var webhookData models.ObjectAntares1
+	if err := c.ShouldBindJSON(&webhookData); err != nil {
+		response := helpers.APIRespon("Error, inputan tidak sesuai", 220, "error",nil)
+		c.JSON(220, response)
+		return
+	}
+	Antares_Device_Id := strings.Replace(webhookData.First.M2m_nev.M2m_rep.M2m_cin.Pi, "/antares-cse/cnt-", "", -1)
+	getData, err := n.homeService.GetDatafromWebhook(webhookData.First.M2m_nev.M2m_rep.M2m_cin.Con, Antares_Device_Id)
+	if err != nil{
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Ini hasil data dari webhook \n",getData)
 }

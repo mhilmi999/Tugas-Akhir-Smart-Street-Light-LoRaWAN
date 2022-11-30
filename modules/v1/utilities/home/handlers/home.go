@@ -9,6 +9,7 @@ import (
 
 type HomeHandler interface{
 	ReceivedData(c *gin.Context)
+	SubscribeWebhook(c *gin.Context)
 }
 
 type homeHandler struct{

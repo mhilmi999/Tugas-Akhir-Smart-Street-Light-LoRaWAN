@@ -13,6 +13,7 @@ type Service interface{
 	GetDatafromCon(input string, DeviceId string)(models.ConnectionDat, error)
 	GetChartData() ([]models.DeviceChartData, error) 
 	GetListDevice()([]models.ListDevice, error)
+	GetDatafromWebhook(sensorData string, antaresDeviceID string)(models.ConnectionDat, error)
 }
 
 type service struct{
@@ -37,8 +38,8 @@ func(n *service) GetDatafromCon(input string, DeviceId string)(models.Connection
 	}
 	err = n.repository.BindSensorData(data, DeviceId)
 	
-	fmt.Println("Ini hasil data sensornya \n",data.Data)
-	fmt.Println("Ini hasil data Con fullnya \n",data)
+	// fmt.Println("Ini hasil data sensornya \n",data.Data)
+	// fmt.Println("Ini hasil data Con fullnya \n",data)
 	return data, nil
 }
 
@@ -50,4 +51,16 @@ func (n *service) GetChartData() ([]models.DeviceChartData, error) {
 func (n *service) GetListDevice()([]models.ListDevice, error){
 	listDevice, err := n.repository.GetListDevice()
 	return listDevice, err
+}
+
+func (n *service) GetDatafromWebhook(sensorData string, antaresDeviceID string)(models.ConnectionDat, error){
+	var data models.ConnectionDat
+	err := json.Unmarshal([]byte(sensorData), &data)
+	if err != nil{
+		fmt.Println(err)
+		return data,err
+	}
+	fmt.Println("Ini hasil data sensor arusnya \n",data.Data)
+	err = n.repository.BindSensorData(data, antaresDeviceID)
+	return data,err
 }
