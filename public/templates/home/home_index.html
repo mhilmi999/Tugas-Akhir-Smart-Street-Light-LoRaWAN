@@ -92,7 +92,7 @@
                                     <!-- Line Chart -->
                                     <div id="reportsChart"></div>
 
-                                    <script>
+                                    <!-- <script>
                                         document.addEventListener("DOMContentLoaded", () => {
                                             new ApexCharts(document.querySelector("#reportsChart"), {
                                                 series: [{
@@ -143,7 +143,73 @@
                                                 }
                                             }).render();
                                         });
+                                    </script> -->
+                                    <script>
+                                        var data = JSON.parse(`{{ .chartData }}`);
+                                        var voltage = [];
+                                        var current = [];
+                                        var power = [];
+                                        var datetime = [];
+                                        // console.log(data);
+                                        for (i = 0; i < data.length; i++) {
+                                            voltage.push(data[i].Voltage);
+                                            current.push(data[i].Ampere);
+                                            power.push(data[i].Power);
+                                            datetime.push(data[i].History_date)
+                                        }
+
+                                        document.addEventListener("DOMContentLoaded", () => {
+                                            new ApexCharts(document.querySelector("#reportsChart"), {
+                                                series: [{
+                                                    name: 'Voltage',
+                                                    data: voltage,
+                                                }, {
+                                                    name: 'Current',
+                                                    data: current
+                                                }, {
+                                                    name: 'Power',
+                                                    data: power
+                                                }],
+                                                chart: {
+                                                    height: 350,
+                                                    type: 'area',
+                                                    toolbar: {
+                                                        show: false
+                                                    },
+                                                },
+                                                markers: {
+                                                    size: 4
+                                                },
+                                                colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                                                fill: {
+                                                    type: "gradient",
+                                                    gradient: {
+                                                        shadeIntensity: 1,
+                                                        opacityFrom: 0.3,
+                                                        opacityTo: 0.4,
+                                                        stops: [0, 90, 100]
+                                                    }
+                                                },
+                                                dataLabels: {
+                                                    enabled: false
+                                                },
+                                                stroke: {
+                                                    curve: 'smooth',
+                                                    width: 2
+                                                },
+                                                xaxis: {
+                                                    type: 'datetime',
+                                                    categories: datetime
+                                                },
+                                                tooltip: {
+                                                    x: {
+                                                        format: 'dd/MM/yy HH:mm'
+                                                    },
+                                                }
+                                            }).render();
+                                        });
                                     </script>
+
                                     <!-- End Line Chart -->
 
                                 </div>
@@ -152,38 +218,7 @@
                         </div>
                         <!-- End Energy Charts -->
 
-                        <!-- Device in General -->
-                        <div class="col-12">
-                            <div class="card recent-sales overflow-auto">
-                                <div class="card-body">
-                                    <h5 class="card-title">Custom LoRa end-nodes<span>| Today</span></h5>
 
-                                    <table class="table table-borderless datatable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Device-ID</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Power Consumption Monthly</th>
-                                                <th scope="col">Total Consumption Power</th>
-                                                <th scope="col">Last Updated</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row"><a href="#">9kTnIWM5RKynICqo</a></th>
-                                                <td>On</td>
-                                                <td><a href="#" class="text-primary">1224</a></td>
-                                                <td>1500</td>
-                                                <td><span class="badge bg-success">09:00 25-11-2022</span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-
-                            </div>
-                        </div>
-                        <!-- End Device in General -->
                     </div>
                 </div>
                 <!-- End Left side columns -->

@@ -5,17 +5,17 @@ type ModulationData struct {
 	Spreading int `json:"spreading"`
 }
 type HardwareData struct {
-	Snr  float64 `json:"snr"`
-	Rssi float64 `json:"rssi"`
+	Snr  int `json:"snr"`
+	Rssi int `json:"rssi"`
 }
 type RadioData struct {
-	Gps_time   string     		`json:"gps_time"`
+	Gps_time   int     		`json:"gps_time"`
 	Hardware   HardwareData   	`json:"hardware"`
 	DataRate   int        		`json:"datarate"`
 	Modulation ModulationData 	`json:"modulation"`
-	Delay      string     		`json:"delay"`
+	Delay      float64     		`json:"delay"`
 	Freq       float64    		`json:"freq"`
-	Size       string     		`json:"size"`
+	Size       int     		`json:"size"`
 }
 
 
@@ -41,6 +41,7 @@ type ConnectionDat struct {
 	Port    int          	`json:"port"`
 	Data    DataReceived 	`json:"data"`
 	Counter int          	`json:"counter"`
+	DevEUI  string       	`json:"devEui"`
 	Radio   RadioData		`json:"radio"`
 }
 

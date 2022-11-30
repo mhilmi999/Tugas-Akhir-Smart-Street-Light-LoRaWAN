@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/models"
 	"gorm.io/gorm"
@@ -13,6 +14,8 @@ import (
 
 type Repository interface {
 	GetLatestCon(token string) (models.Received, error)
+	BindSensorData(input models.ConnectionDat, DeviceId string) error
+	GetChartData()([]models.DeviceChartData, error)
 }
 
 type repository struct {
@@ -45,4 +48,14 @@ func (n *repository) GetLatestCon(token string) (models.Received, error) {
 	json.Unmarshal(isiBody, &data)
 	fmt.Println(data.First.Con)
 	return data, err
+}
+
+func (n *repository) BindSensorData(input models.ConnectionDat, DeviceId string) error{
+	err := n.db.Exec("INSERT INTO device_history (device_id, power, voltage, ampere, device_cons, history_date) VALUES (?,?,?,?,?,?)",DeviceId, input.Data.Pwr, input.Data.Volt, input.Data.Cur, 1, time.Now()).Error
+	return err	
+}
+func (n *repository) GetChartData()([]models.DeviceChartData, error){
+	var chartData []models.DeviceChartData
+	err := n.db.Raw("SELECT power, voltage, ampere, device_cons, history_date FROM device_history").Scan(&chartData).Error
+	return chartData, err
 }

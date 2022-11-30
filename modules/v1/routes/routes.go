@@ -41,10 +41,9 @@ func Init(db *gorm.DB, conf config.Conf, router *gin.Engine) *gin.Engine {
 	home.GET("/register", homeViewV1.Register)
 	home.GET("/logout", userHandlerV1.Logout)
 	home.GET("/list-device", homeViewV1.ListDevice)
+	home.GET("/antares-data", homeHandlerV1.ReceivedData)
 	home.POST("/login", userHandlerV1.Login)
 	home.POST("register", userHandlerV1.Register)
-	//home.GET("/antares-data", userHandlerV1.ReceivedData)
-	home.GET("/antares-data", homeHandlerV1.ReceivedData)
 	router = ParseTmpl(router)
 
 	return router

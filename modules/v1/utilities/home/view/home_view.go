@@ -1,6 +1,7 @@
 package view
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -43,9 +44,19 @@ func Tanggal(t time.Time) string {
 
 func (h *homeView) Index(c *gin.Context) {
 	session := sessions.Default(c)
+	getChartData, err := h.homeService.GetChartData()
+	if err != nil{
+		fmt.Println(err)
+		return
+	}
+	jsonConvCharData, _ := json.Marshal(getChartData)
+	var arrObj interface{}
+	json.Unmarshal(jsonConvCharData, &arrObj)
+	
 	c.HTML(http.StatusOK, "home", gin.H{
 		"title":    "Home SSL",
 		"timeNow":  Tanggal(time.Now()),
+		"chartData": arrObj,
 		"UserID":   session.Get("userID"),
 		"UserName": session.Get("userName"),
 	})
