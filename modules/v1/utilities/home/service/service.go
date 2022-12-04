@@ -14,7 +14,7 @@ type Service interface{
 	GetChartData() ([]models.DeviceChartData, error) 
 	GetListDevice()([]models.ListDevice, error)
 	GetDatafromWebhook(sensorData string, antaresDeviceID string)(models.ConnectionDat, error)
-	ControlLight(power string, token string)int
+	ControlLight(power string, deviceid string, token string)int
 }
 
 type service struct{
@@ -64,8 +64,8 @@ func (n *service) GetDatafromWebhook(sensorData string, antaresDeviceID string)(
 	return data,err
 }
 
-func (n *service) ControlLight(power string, token string)int{
-	rtn, err := n.repository.ControlLight(power, token)
+func (n *service) ControlLight(power string, deviceid string, token string)int{
+	rtn, err := n.repository.ControlLight(power, deviceid, token)
 	if err != nil{
 		fmt.Println(err)
 		return 0

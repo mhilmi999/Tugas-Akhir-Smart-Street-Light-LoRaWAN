@@ -42,13 +42,30 @@
                                         <tbody>
                                             {{ range $i, $ld := .tableDeviceData }}
                                             <tr>
-                                                <th scope="row">
-                                                    <a href="#">{{ $ld.Device_id }}</a>
-                                                </th>
+                                                <td scope="row">
+                                                    {{ $ld.Device_id }}
+                                                </td>
                                                 <td>{{ $ld.Voltage }}</td>
-                                                <td><a href="#" class="text-primary">{{ $ld.Ampere }}</a></td>
+                                                <td>{{ $ld.Ampere }}</td>
                                                 <td>{{ $ld.Power }}</td>
-                                                <td><span class="badge bg-success">{{ $ld.Device_cons }}</span></td>
+                                                <td>
+                                                    {{if (eq $ld.Device_cons 1) }}
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked onclick='window.location.assign("/manual-control/0/{{ $ld.Device_id }}")'>
+                                                        <label class="form-check-label" for="flexSwitchCheckChecked">Lampu Menyala</label>
+                                                    </div>
+                                                    {{ else if (eq $ld.Device_cons 0) }}
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onclick='window.location.assign("/manual-control/1/{{ $ld.Device_id }}")'>
+                                                        <label class="form-check-label" for="flexSwitchCheckDefault">Lampu Mati</label>
+                                                    </div>
+                                                    {{ else }}
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onclick='window.location.assign("/manual-control/1/{{ $ld.Device_id }}")'>
+                                                        <label class="form-check-label" for="flexSwitchCheckDefault">Lampu Mati</label>
+                                                    </div>
+                                                    {{ end }}
+                                                </td>
                                             </tr>
                                             {{ end }}
 

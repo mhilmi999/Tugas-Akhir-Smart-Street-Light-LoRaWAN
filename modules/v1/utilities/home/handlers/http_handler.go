@@ -47,9 +47,10 @@ func (n *homeHandler) SubscribeWebhook(c *gin.Context) {
 func (n *homeHandler) ControlLight(c *gin.Context){
 	sessions := sessions.Default(c)
 	power := c.Param("power")
+	deviceid := c.Param("deviceid")
 	token := "01fe7c50a39803d0:93a1cf61893c1605"
 
-	_ = n.homeService.ControlLight(power, token)
+	_ = n.homeService.ControlLight(power, deviceid, token)
 	if power == "1"{
 		sessions.AddFlash("Device Menyala")
 	}else if power == "0"{

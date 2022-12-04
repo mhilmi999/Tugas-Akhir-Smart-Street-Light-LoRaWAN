@@ -17,7 +17,7 @@ type Repository interface {
 	BindSensorData(input models.ConnectionDat, DeviceId string) error
 	GetChartData() ([]models.DeviceChartData, error)
 	GetListDevice() ([]models.ListDevice, error)
-	ControlLight(power string, token string) (int, error)
+	ControlLight(power string, deviceid string, token string) (int, error)
 }
 
 type repository struct {
@@ -69,7 +69,7 @@ func (n *repository) GetListDevice() ([]models.ListDevice, error) {
 	return listDevice, err
 }
 
-func (n *repository) ControlLight(power string, token string) (int, error){
+func (n *repository) ControlLight(power string, deviceid string, token string) (int, error){
 	data := "\r\n{\r\n  \"m2m:cin\": {\r\n    \"con\": \r\n      \"{\r\n      \t \\\"type\\\":\\\"downlink\\\",\r\n      \\\"data\\\":\\\"" + power + "\\\"\r\n      }\"\r\n    }\r\n}"
 
 	client := http.Client{}
@@ -92,5 +92,6 @@ func (n *repository) ControlLight(power string, token string) (int, error){
 		fmt.Println(err)
 		return 0, err		
 	}
+	n.db.Exec("UPDATE device_monitoring SET device_cons = ? WHERE device_id = ?", power, deviceid)
 	return 1, err
 }
