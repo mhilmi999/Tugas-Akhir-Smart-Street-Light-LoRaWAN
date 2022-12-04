@@ -19,8 +19,8 @@
 
   char myStr[100];
   char temp[50];
-  Char outStr[20];
-  int recvStatus = 0;
+  byte outStr[255];
+  byte recvStatus = 0;
   int port, channel, freq;
   bool newmessage = false;
   String dataSend = "";
@@ -81,8 +81,7 @@
       float voltage = getVoltage();
       float current = getCurrent();
       float power = getPower();
-
-      // Uplink Send Data form Sensor to LoRaWAN Gateway    
+          
       Serial.print("Sending: ");
       dataSend = "{\"volt\": " + String(voltage,2) + ", \"cur\": " + String(current,3) +", \"pwr\": " + String(power,2) +"}";
       dataSend.toCharArray(myStr,100);
@@ -103,10 +102,54 @@
     // Check Lora RX
     lora.update();
 
-    // Downlink Receive Data from LoRaWAN Gateway
-    recvStatus = lora.readdata(outStr);
+    recvStatus = lora.readDataByte(outStr);
     if (recvStatus) {
-      Serial.println(outStr);
+      newmessage = true;
+      int counter = 0;
+      port = lora.getFramePortRx();
+      channel = lora.getChannelRx();
+      freq = lora.getChannelRxFreq(channel);
+
+      for (int i = 0; i < recvStatus; i++)
+      {
+        if (((outStr[i] >= 32) && (outStr[i] <= 126)) || (outStr[i] == 10) || (outStr[i] == 13))
+          counter++;
+      }
+      if (port != 0)
+      {
+        if (counter == recvStatus)
+        {
+          Serial.print(F("Received String : "));
+          for (int i = 0; i < recvStatus; i++)
+          {
+            Serial.print(char(outStr[i]));
+          }
+        }
+        else
+        {
+          Serial.print(F("Received Hex: "));
+          for (int i = 0; i < recvStatus; i++)
+          {
+            Serial.print(outStr[i], HEX); Serial.print(" ");
+          }
+        }
+        Serial.println();
+        Serial.print(F("fport: "));    Serial.print(port);Serial.print(" ");
+        Serial.print(F("Ch: "));    Serial.print(channel);Serial.print(" ");
+        Serial.print(F("Freq: "));    Serial.println(freq);Serial.println(" ");
+      }
+      else
+      {
+        Serial.print(F("Received Mac Cmd : "));
+        for (int i = 0; i < recvStatus; i++)
+        {
+          Serial.print(outStr[i], HEX); Serial.print(" ");
+        }
+        Serial.println();
+        Serial.print(F("fport: "));    Serial.print(port);Serial.print(" ");
+        Serial.print(F("Ch: "));    Serial.print(channel);Serial.print(" ");
+        Serial.print(F("Freq: "));    Serial.println(freq);Serial.println(" ");
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -16,6 +17,7 @@ type Repository interface {
 	BindSensorData(input models.ConnectionDat, DeviceId string) error
 	GetChartData() ([]models.DeviceChartData, error)
 	GetListDevice() ([]models.ListDevice, error)
+	ControlLight(power string, token string) (int, error)
 }
 
 type repository struct {
@@ -65,4 +67,30 @@ func (n *repository) GetListDevice() ([]models.ListDevice, error) {
 	var listDevice []models.ListDevice
 	err := n.db.Raw("SELECT d.device_id, m.voltage, m.ampere, m.power, m.device_cons FROM device d INNER JOIN device_monitoring m ON d.device_id = m.device_id;").Scan(&listDevice).Error
 	return listDevice, err
+}
+
+func (n *repository) ControlLight(power string, token string) (int, error){
+	data := "\r\n{\r\n  \"m2m:cin\": {\r\n    \"con\": \r\n      \"{\r\n      \t \\\"type\\\":\\\"downlink\\\",\r\n      \\\"data\\\":\\\"" + power + "\\\"\r\n      }\"\r\n    }\r\n}"
+
+	client := http.Client{}
+	req, err := http.NewRequest("POST", "https://platform.antares.id:8443/~/antares-cse/antares-id/SmartStreetLight/tugasAkhir", bytes.NewBuffer([]byte(data)))
+	req.Header.Set("X-M2M-Origin", token)
+	req.Header.Set("Content-Type", "application/json;ty=4")
+	req.Header.Set("Accept", "application/json")
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+	defer resp.Body.Close()
+	_, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return 0, err		
+	}
+	return 1, err
 }

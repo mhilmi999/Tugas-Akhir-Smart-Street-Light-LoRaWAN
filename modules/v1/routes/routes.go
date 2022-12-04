@@ -45,6 +45,7 @@ func Init(db *gorm.DB, conf config.Conf, router *gin.Engine) *gin.Engine {
 	home.POST("/login", userHandlerV1.Login)
 	home.POST("register", userHandlerV1.Register)
 	home.POST("/webhook", homeHandlerV1.SubscribeWebhook)
+	home.GET("/manual-control/:power", homeHandlerV1.ControlLight)
 	router = ParseTmpl(router)
 
 	return router

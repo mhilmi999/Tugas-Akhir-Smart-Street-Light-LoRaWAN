@@ -2,8 +2,10 @@ package home
 
 import (
 	"fmt"
+	"net/http"
 	"strings"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/models"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/pkg/helpers"
@@ -40,4 +42,21 @@ func (n *homeHandler) SubscribeWebhook(c *gin.Context) {
 		return
 	}
 	fmt.Println("Ini hasil data dari webhook \n",getData)
+}
+
+func (n *homeHandler) ControlLight(c *gin.Context){
+	sessions := sessions.Default(c)
+	power := c.Param("power")
+	token := "01fe7c50a39803d0:93a1cf61893c1605"
+
+	_ = n.homeService.ControlLight(power, token)
+	if power == "1"{
+		sessions.AddFlash("Device Menyala")
+	}else if power == "0"{
+		sessions.AddFlash("Device Mati")
+	}else{
+		sessions.AddFlash("Kesalahan! Tidak ada respon dari device")
+	}
+	c.Redirect(http.StatusFound, "/list-device")
+
 }
