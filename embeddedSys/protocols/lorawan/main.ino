@@ -81,10 +81,11 @@
       float voltage = getVoltage();
       float current = getCurrent();
       float power = getPower();
+      float energy = getEnergy();
 
       // Uplink Send Data form Sensor to LoRaWAN Gateway    
       Serial.print("Sending: ");
-      dataSend = "{\"volt\": " + String(voltage,2) + ", \"cur\": " + String(current,3) +", \"pwr\": " + String(power,2) +"}";
+      dataSend = "{\"volt\": " + String(voltage,2) + ", \"cur\": " + String(current,3) +", \"pwr\": " + String(power,2) +", \"eng\": " + String(energy,3) "}";
       dataSend.toCharArray(myStr,100);
       Serial.println(myStr);
       lora.sendUplink(myStr, strlen(myStr), 0);
@@ -97,6 +98,7 @@
       Serial.print("Voltage: ");      Serial.print(voltage);      Serial.println("V");
       Serial.print("Current: ");      Serial.print(current);      Serial.println("A");
       Serial.print("Power: ");        Serial.print(power);        Serial.println("W");
+      Serial.print("Energy: ");       Serial.print(energy,3);     Serial.println("kWh");
 
     }
 
@@ -133,4 +135,11 @@
       return 0;
     }
     return p;
+  }
+  float getEnergy(){
+    float e = pzem.energy();
+    if(isnan(e)){
+      Serial.println("Error reading energy");
+      return 0;
+    }
   }

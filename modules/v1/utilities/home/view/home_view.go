@@ -3,6 +3,7 @@ package view
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
 	"time"
 
@@ -44,21 +45,39 @@ func Tanggal(t time.Time) string {
 
 func (h *homeView) Index(c *gin.Context) {
 	session := sessions.Default(c)
+	var now = time.Now()
 	getChartData, err := h.homeService.GetChartData()
-	if err != nil{
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	jsonConvCharData, _ := json.Marshal(getChartData)
 	var arrObj interface{}
 	json.Unmarshal(jsonConvCharData, &arrObj)
-	
+
+	deviceId := "9kTnIWM5RKynICqo"
+
+	getEstimatedPrice, err := h.homeService.GetEstimatedPrice(deviceId)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	energyTotal := getEstimatedPrice.Energy_total
+	estPriceView := math.Round(getEstimatedPrice.Price_Est*100) / 100
+	timeFormatter := getEstimatedPrice.Last_updated.Format("02 Jan 2006 15:04:05")
+	monthNow := now.Month()
+	fmt.Println(monthNow)
+
 	c.HTML(http.StatusOK, "home", gin.H{
-		"title":    "Home SSL",
-		"timeNow":  Tanggal(time.Now()),
-		"chartData": arrObj,
-		"UserID":   session.Get("userID"),
-		"UserName": session.Get("userName"),
+		"title":          "Home SSL",
+		"timeNow":        Tanggal(time.Now()),
+		"chartData":      arrObj,
+		"energyTotal":    energyTotal,
+		"monthNow":       monthNow,
+		"priceEstimated": estPriceView,
+		"lastUpdatedEst": timeFormatter,
+		"UserID":         session.Get("userID"),
+		"UserName":       session.Get("userName"),
 	})
 }
 
@@ -77,17 +96,17 @@ func (h *homeView) Register(c *gin.Context) {
 func (h *homeView) ListDevice(c *gin.Context) {
 	session := sessions.Default(c)
 	getListDevice, err := h.homeService.GetListDevice()
-	if err != nil{
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	fmt.Println(getListDevice)
 
 	c.HTML(http.StatusOK, "list_device", gin.H{
-		"title":    "List Device SSL",
-		"timeNow":  Tanggal(time.Now()),
-		"tableDeviceData" : getListDevice,
-		"UserID":   session.Get("userID"),
-		"UserName": session.Get("userName"),
+		"title":           "List Device SSL",
+		"timeNow":         Tanggal(time.Now()),
+		"tableDeviceData": getListDevice,
+		"UserID":          session.Get("userID"),
+		"UserName":        session.Get("userName"),
 	})
 }

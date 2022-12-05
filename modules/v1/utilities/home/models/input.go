@@ -48,6 +48,7 @@ type DataReceived struct {
 	Volt float64 `json:"volt"`
 	Cur  float64 `json:"cur"`
 	Pwr  float64 `json:"pwr"`
+	Eng  float64 `json:"eng"`
 }
 
 type ObjectAntares5 struct {
