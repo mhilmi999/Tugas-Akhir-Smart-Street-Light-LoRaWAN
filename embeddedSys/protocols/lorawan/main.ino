@@ -13,14 +13,14 @@
   const char *appSKey = "000000000000000093a1cf61893c1605";
 
 
-  const unsigned long interval = 10000;    // 10 s interval to send message
+  const unsigned long interval = 120000;    // 2 mins interval to send message
   unsigned long previousMillis = 0;  // will store last time message sent
   unsigned int counter = 0;     // message counter
 
   char myStr[100];
   char temp[50];
-  Char outStr[20];
-  int recvStatus = 0;
+  byte outStr[255];
+  byte recvStatus = 0;
   int port, channel, freq;
   bool newmessage = false;
   String dataSend = "";
@@ -82,10 +82,9 @@
       float current = getCurrent();
       float power = getPower();
       float energy = getEnergy();
-
-      // Uplink Send Data form Sensor to LoRaWAN Gateway    
+          
       Serial.print("Sending: ");
-      dataSend = "{\"volt\": " + String(voltage,2) + ", \"cur\": " + String(current,3) +", \"pwr\": " + String(power,2) +", \"eng\": " + String(energy,3) "}";
+      dataSend = "{\"v\": " + String(voltage,2) + ", \"c\": " + String(current,3) +", \"p\": " + String(power,2) +", \"e\": " + String(energy,2) +"}";
       dataSend.toCharArray(myStr,100);
       Serial.println(myStr);
       lora.sendUplink(myStr, strlen(myStr), 0);
@@ -98,17 +97,60 @@
       Serial.print("Voltage: ");      Serial.print(voltage);      Serial.println("V");
       Serial.print("Current: ");      Serial.print(current);      Serial.println("A");
       Serial.print("Power: ");        Serial.print(power);        Serial.println("W");
-      Serial.print("Energy: ");       Serial.print(energy,3);     Serial.println("kWh");
 
     }
 
     // Check Lora RX
     lora.update();
 
-    // Downlink Receive Data from LoRaWAN Gateway
-    recvStatus = lora.readdata(outStr);
+    recvStatus = lora.readDataByte(outStr);
     if (recvStatus) {
-      Serial.println(outStr);
+      newmessage = true;
+      int counter = 0;
+      port = lora.getFramePortRx();
+      channel = lora.getChannelRx();
+      freq = lora.getChannelRxFreq(channel);
+
+      for (int i = 0; i < recvStatus; i++)
+      {
+        if (((outStr[i] >= 32) && (outStr[i] <= 126)) || (outStr[i] == 10) || (outStr[i] == 13))
+          counter++;
+      }
+      if (port != 0)
+      {
+        if (counter == recvStatus)
+        {
+          Serial.print(F("Received String : "));
+          for (int i = 0; i < recvStatus; i++)
+          {
+            Serial.print(char(outStr[i]));
+          }
+        }
+        else
+        {
+          Serial.print(F("Received Hex: "));
+          for (int i = 0; i < recvStatus; i++)
+          {
+            Serial.print(outStr[i], HEX); Serial.print(" ");
+          }
+        }
+        Serial.println();
+        Serial.print(F("fport: "));    Serial.print(port);Serial.print(" ");
+        Serial.print(F("Ch: "));    Serial.print(channel);Serial.print(" ");
+        Serial.print(F("Freq: "));    Serial.println(freq);Serial.println(" ");
+      }
+      else
+      {
+        Serial.print(F("Received Mac Cmd : "));
+        for (int i = 0; i < recvStatus; i++)
+        {
+          Serial.print(outStr[i], HEX); Serial.print(" ");
+        }
+        Serial.println();
+        Serial.print(F("fport: "));    Serial.print(port);Serial.print(" ");
+        Serial.print(F("Ch: "));    Serial.print(channel);Serial.print(" ");
+        Serial.print(F("Freq: "));    Serial.println(freq);Serial.println(" ");
+      }
     }
   }
 
@@ -137,9 +179,10 @@
     return p;
   }
   float getEnergy(){
-    float e = pzem.energy();
-    if(isnan(e)){
-      Serial.println("Error reading energy");
-      return 0;
-    }
+  float e = pzem.energy();
+  if(isnan(e)){
+    Serial.println("Error reading energy");
+    return 0;
+  }
+  return e;
   }

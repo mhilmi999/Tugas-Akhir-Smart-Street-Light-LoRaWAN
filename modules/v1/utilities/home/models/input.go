@@ -45,10 +45,10 @@ type ConnectionDat struct {
 }
 
 type DataReceived struct {
-	Volt float64 `json:"volt"`
-	Cur  float64 `json:"cur"`
-	Pwr  float64 `json:"pwr"`
-	Eng  float64 `json:"eng"`
+	V float64 `json:"v"`
+	C  float64 `json:"c"`
+	P  float64 `json:"p"`
+	E  float64 `json:"e"`
 }
 
 type ObjectAntares5 struct {

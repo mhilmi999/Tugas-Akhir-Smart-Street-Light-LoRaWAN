@@ -61,8 +61,8 @@ func (n *repository) CheckEnergyExist(antaresDeviceID string) (float64, error) {
 }
 
 func (n *repository) BindSensorData(input models.ConnectionDat, DeviceId string, energyExist float64) error {
-	err := n.db.Exec("INSERT INTO device_history (device_id, power, voltage, ampere, device_cons, history_date, energy) VALUES (?,?,?,?,?,?,?)", DeviceId, input.Data.Pwr, input.Data.Volt, input.Data.Cur, 1, time.Now(), input.Data.Eng).Error
-	err = n.db.Exec("UPDATE device_monitoring SET power = ?, voltage = ?, ampere = ?, device_cons = ?, energy_total = ?, last_updated = ? WHERE device_id = ?", input.Data.Pwr, input.Data.Volt, input.Data.Cur, 1, energyExist+input.Data.Eng, time.Now(), DeviceId).Error
+	err := n.db.Exec("INSERT INTO device_history (device_id, power, voltage, ampere, device_cons, history_date, energy) VALUES (?,?,?,?,?,?,?)", DeviceId, input.Data.P, input.Data.V, input.Data.C, 1, time.Now(), input.Data.E).Error
+	err = n.db.Exec("UPDATE device_monitoring SET power = ?, voltage = ?, ampere = ?, device_cons = ?, energy_total = ?, last_updated = ? WHERE device_id = ?", input.Data.P, input.Data.V, input.Data.C, 1, energyExist+input.Data.E, time.Now(), DeviceId).Error
 	return err
 }
 func (n *repository) GetChartData() ([]models.DeviceChartData, error) {
