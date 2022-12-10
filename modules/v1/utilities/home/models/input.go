@@ -1,21 +1,12 @@
 package models
 
-type ModulationData struct {
-	Bandwidth int `json:"bandwidth"`
-	Spreading int `json:"spreading"`
+type MqttSubsMsg struct{
+	Pertama DetailMqttSubsMsg `json:"m2m:rsp"`
 }
-type HardwareData struct {
-	Snr  float64 `json:"snr"`
-	Rssi int     `json:"rssi"`
-}
-type RadioData struct {
-	Gps_time   int            `json:"gps_time"`
-	Hardware   HardwareData   `json:"hardware"`
-	DataRate   int            `json:"datarate"`
-	Modulation ModulationData `json:"modulation"`
-	Delay      float64        `json:"delay"`
-	Freq       float64        `json:"freq"`
-	Size       int            `json:"size"`
+
+type DetailMqttSubsMsg struct{
+	Kedua int `json:"rsc"`
+	Ketiga Received `json:"pc"`
 }
 
 type Received struct {
@@ -81,4 +72,22 @@ type ObjectAntares2 struct {
 
 type ObjectAntares1 struct {
 	First ObjectAntares2 `json:"m2m:sgn"`
+}
+
+type ModulationData struct {
+	Bandwidth int `json:"bandwidth"`
+	Spreading int `json:"spreading"`
+}
+type HardwareData struct {
+	Snr  float64 `json:"snr"`
+	Rssi int     `json:"rssi"`
+}
+type RadioData struct {
+	Gps_time   int            `json:"gps_time"`
+	Hardware   HardwareData   `json:"hardware"`
+	DataRate   int            `json:"datarate"`
+	Modulation ModulationData `json:"modulation"`
+	Delay      float64        `json:"delay"`
+	Freq       float64        `json:"freq"`
+	Size       int            `json:"size"`
 }

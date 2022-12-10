@@ -6,7 +6,6 @@ import (
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/app/config"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/app/database"
 	routesV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/routes"
-	mqttService "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/embeddedSys/protocols/mqtt"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/pkg/html"
 
 	"github.com/gin-contrib/cors"
@@ -43,8 +42,7 @@ func main() {
 	}
 
 	router := routesV1.Init(setup())
-	// Mqtt Subscribe using go routine (mini thread)
-	go mqttService.MqttRun()
+
 
 	router.Run(":" + conf.App.Port)
 }
