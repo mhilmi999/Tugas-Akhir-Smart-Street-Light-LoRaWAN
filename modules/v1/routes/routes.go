@@ -33,6 +33,9 @@ func Init(db *gorm.DB, conf config.Conf, router *gin.Engine) *gin.Engine {
 	userRepositoryV1 := userRepositoryV1.NewRepository(db)
 	userServiceV1 := userServiceV1.NewService(userRepositoryV1)
 	userHandlerV1 := userHandlerV1.NewUserHandler(userServiceV1)
+	
+	
+	
 	// Routing to website service
 	home := router.Group("/")
 	home.GET("", middlewares.IsLogin(), homeViewV1.Index)
@@ -40,12 +43,12 @@ func Init(db *gorm.DB, conf config.Conf, router *gin.Engine) *gin.Engine {
 	home.GET("/login", homeViewV1.Login)
 	home.GET("/register", homeViewV1.Register)
 	home.GET("/logout", userHandlerV1.Logout)
-	home.GET("/list-device", homeViewV1.ListDevice)
+	home.GET("/list-device", middlewares.IsLogin(), homeViewV1.ListDevice)
 	home.GET("/antares-data", homeHandlerV1.ReceivedData)
 	home.POST("/login", userHandlerV1.Login)
 	home.POST("register", userHandlerV1.Register)
 	home.POST("/webhook", homeHandlerV1.SubscribeWebhook)
-	home.GET("/manual-control/:power/:deviceid", homeHandlerV1.ControlLight)
+	home.GET("/manual-control/:power/:deviceid", middlewares.IsLogin(), homeHandlerV1.ControlLight)
 	router = ParseTmpl(router)
 
 	return router

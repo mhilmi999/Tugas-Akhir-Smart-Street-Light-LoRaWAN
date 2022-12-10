@@ -62,3 +62,7 @@ func (n *homeHandler) ControlLight(c *gin.Context){
 	c.Redirect(http.StatusFound, "/list-device")
 
 }
+
+func (n *homeHandler) SubscribeMqtt(c *gin.Context) {
+	// n.homeService.SubscribeMqtt()
+}
