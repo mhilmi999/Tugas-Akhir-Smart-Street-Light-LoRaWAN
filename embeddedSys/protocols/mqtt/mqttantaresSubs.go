@@ -75,7 +75,7 @@ func MqttRun() {
 // 	num := 10
 // 	for i := 0; i < num; i++ {
 // 		text := fmt.Sprintf("Message %d", i)
-// 		token := client.Publish("topic/test", 0, false, text)
+// 		token := client.Publish("/oneM2M/resp/antares-cse/01fe7c50a39803d0:93a1cf61893c1605/json", 0, false, text)
 // 		token.Wait()
 // 		time.Sleep(time.Second)
 // 	}

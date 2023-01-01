@@ -1,7 +1,6 @@
   #include <lorawan.h>
   #include <PZEM004Tv30.h>
 
-  #define RELAY 4
   #if defined(ESP32)
   PZEM004Tv30 pzem(Serial2, 16, 17);
   #else
@@ -9,35 +8,30 @@
   #endif
 
   //ABP Credentials
-  const char *devAddr = "36009001"; // Tugas Akhir Dev Address
+  const char *devAddr = "36009001";
   const char *nwkSKey = "01fe7c50a39803d00000000000000000";
   const char *appSKey = "000000000000000093a1cf61893c1605";
 
-
-  const unsigned long interval = 30000;    // 30 s interval to send message
+  const unsigned long interval = 120000;    // 2 mins interval to send message
   unsigned long previousMillis = 0;  // will store last time message sent
   unsigned int counter = 0;     // message counter
-
   char myStr[100];
+  char temp[50];
   byte outStr[255];
   byte recvStatus = 0;
   int port, channel, freq;
   bool newmessage = false;
   String dataSend = "";
-  String stringout;
-
   const sRFM_pins RFM_pins = {
     .CS = 5,
     .RST = 17,
     .DIO0 = 2,
     .DIO1 = 4,
   };
-
   void setup() {
     // Setup loraid access
     Serial.begin(115200);
     delay(2000);
-    pinMode(RELAY,OUTPUT);
     if (!lora.init()) {
       Serial.println("RFM95 not detected");
       delay(5000);
@@ -68,7 +62,6 @@
   void loop() {
     lorawanrxtx();
   }
-
   void lorawanrxtx(){
     // Check interval overflow
     if (millis() - previousMillis > interval) {
@@ -108,7 +101,6 @@
     recvStatus = lora.readDataByte(outStr);
     if (recvStatus) {
       newmessage = true;
-      char outchar[255] = {};
       int counter = 0;
       port = lora.getFramePortRx();
       channel = lora.getChannelRx();
@@ -127,7 +119,6 @@
           for (int i = 0; i < recvStatus; i++)
           {
             Serial.print(char(outStr[i]));
-            outchar[i] = outStr[i];
           }
         }
         else
@@ -154,21 +145,6 @@
         Serial.print(F("fport: "));    Serial.print(port);Serial.print(" ");
         Serial.print(F("Ch: "));    Serial.print(channel);Serial.print(" ");
         Serial.print(F("Freq: "));    Serial.println(freq);Serial.println(" ");
-      }
-
-      stringout = (String)outchar;
-      Serial.println(stringout);
-      if (stringout == "1")
-      {
-        Serial.print("RELAY ON");
-        digitalWrite(RELAY, HIGH);
-        stringout="";
-      }
-      if (stringout == "0")
-      {
-        Serial.print("RELAY OFF");
-        digitalWrite(RELAY,LOW);
-        stringout="";
       }
     }
   }

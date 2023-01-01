@@ -35,14 +35,12 @@ func (n *homeHandler) SubscribeWebhook(c *gin.Context) {
 		c.JSON(220, response)
 		return
 	}
-	fmt.Println("Pakettt \n",webhookData)
 	Antares_Device_Id := strings.Replace(webhookData.First.M2m_nev.M2m_rep.M2m_cin.Pi, "/antares-cse/cnt-", "", -1)
-	getData, err := n.homeService.GetDatafromWebhook(webhookData.First.M2m_nev.M2m_rep.M2m_cin.Con, Antares_Device_Id)
+	_, err := n.homeService.GetDatafromWebhook(webhookData.First.M2m_nev.M2m_rep.M2m_cin.Con, Antares_Device_Id)
 	if err != nil{
 		fmt.Println(err)
 		return
 	}
-	fmt.Println("Ini hasil data dari webhook \n",getData)
 }
 
 func (n *homeHandler) ControlLight(c *gin.Context){

@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
-	
+
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/models"
 	"gorm.io/gorm"
 )
@@ -82,6 +82,7 @@ func (n *repository) ControlLight(power string, deviceid string, token string) (
 
 	client := http.Client{}
 	req, err := http.NewRequest("POST", "https://platform.antares.id:8443/~/antares-cse/antares-id/SmartStreetLight/tugasAkhir", bytes.NewBuffer([]byte(data)))
+	// req, err := http.NewRequest("POST", "https://platform.antares.id:8443/~/antares-cse/antares-id/AntaresDevKitTest/LoRaUplinkDownlinkTest", bytes.NewBuffer([]byte(data)))
 	req.Header.Set("X-M2M-Origin", token)
 	req.Header.Set("Content-Type", "application/json;ty=4")
 	req.Header.Set("Accept", "application/json")
