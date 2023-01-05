@@ -160,14 +160,14 @@
       Serial.println(stringout);
       if (stringout == "1")
       {
-        Serial.print("RELAY ON");
         digitalWrite(RELAY, HIGH);
+        Serial.print("RELAY ON");
         stringout="";
       }
       if (stringout == "0")
       {
-        Serial.print("RELAY OFF");
         digitalWrite(RELAY,LOW);
+        Serial.print("RELAY OFF");
         stringout="";
       }
     }
