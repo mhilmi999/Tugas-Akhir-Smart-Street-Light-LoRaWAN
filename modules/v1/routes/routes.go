@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/app/config"
 
-	//"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/app/middlewares"
+	"github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/app/middlewares"
 	//mqttService "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/embeddedSys/protocols/mqtt"
 	homeHandlerV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/handlers"
 	homeRepositoryV1 "github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/modules/v1/utilities/home/repository"
@@ -41,21 +41,21 @@ func Init(db *gorm.DB, conf config.Conf, router *gin.Engine) *gin.Engine {
 
 	// Routing to website service
 	home := router.Group("/")
-	// home.GET("", middlewares.IsLogin(), homeViewV1.Index)
-	// home.GET("/home", middlewares.IsLogin(), homeViewV1.Index)
-	home.GET("", homeViewV1.Index)
-	home.GET("/home", homeViewV1.Index)
+	home.GET("", middlewares.IsLogin(), homeViewV1.Index)
+	home.GET("/home", middlewares.IsLogin(), homeViewV1.Index)
+	// home.GET("", homeViewV1.Index)
+	// home.GET("/home", homeViewV1.Index)
 	home.GET("/login", homeViewV1.Login)
 	home.GET("/register", homeViewV1.Register)
 	home.GET("/logout", userHandlerV1.Logout)
-	// home.GET("/list-device", middlewares.IsLogin(), homeViewV1.ListDevice)
-	home.GET("/list-device", homeViewV1.ListDevice)
+	home.GET("/list-device", middlewares.IsLogin(), homeViewV1.ListDevice)
+	// home.GET("/list-device", homeViewV1.ListDevice)
 	home.GET("/antares-data", homeHandlerV1.ReceivedData)
 	home.POST("/login", userHandlerV1.Login)
 	home.POST("register", userHandlerV1.Register)
 	home.POST("/webhook", homeHandlerV1.SubscribeWebhook)
-	// home.GET("/manual-control/:power/:deviceid", middlewares.IsLogin(), homeHandlerV1.ControlLight)
-	home.GET("/manual-control/:power/:deviceid", homeHandlerV1.ControlLight)
+	home.GET("/manual-control/:power/:deviceid", middlewares.IsLogin(), homeHandlerV1.ControlLight)
+	// home.GET("/manual-control/:power/:deviceid", homeHandlerV1.ControlLight)
 	router = ParseTmpl(router)
 
 	return router
