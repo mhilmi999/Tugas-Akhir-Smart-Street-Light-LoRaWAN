@@ -1,4 +1,5 @@
 # Tugas-Akhir-Smart-Street-Light-LoRaWAN
+[Repository Link](https://github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN)
 
 ## Hal-hal yang dibutuhkan
 - Bahasa Pemrograman Go [Go official website](https://go.dev/)
@@ -7,7 +8,7 @@
 - Sistem folder yang berbasis code base [Clean Architecture](https://medium.com/golangid/mencoba-golang-clean-architecture-c2462f355f41)
 - CSS yang dibangun dengan integrasi [Bootstrap 5](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
 
-## Instalasi dan Menjalankan Aplikasi
+## Instalasi dan Menjalankan Sistem Aplikasi
 - Unduh dan [Clone repository](https://github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN.git) ini pada IDE kesayangan Anda
 - Pastikan Go telah terinstall pada perangkat anda, hal ini d
 apat dilakukan dengan command (Contoh dengan Mac):
@@ -45,3 +46,5 @@ apat dilakukan dengan command (Contoh dengan Mac):
     ![Dashboard](readmeAsset/dashboard.png)
 - Tampilan laman list perangkat 
     ![List of Device](readmeAsset/listDevice.png)
+
+
