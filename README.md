@@ -1,5 +1,9 @@
-# Tugas-Akhir-Smart-Street-Light-LoRaWAN
-[Repository Link](https://github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN)
+# Documentation Presentation
+## Final Project of Bachelor Degree
+[View the Presentation]([https://github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN](https://docs.google.com/presentation/d/1WL7GJ676_46_-2-AJBF_TlKwIyaG7xFXZGKN8_uwHc8/edit?usp=sharing))
+
+## International Journal ISITIA 2023
+[See the Conference]([https://github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN](https://docs.google.com/presentation/d/11-YCotPrYtim7DABWWCKuuAZa3wxNNcI8QoDBYtIVPg/edit?usp=sharing))
 
 ## Hal-hal yang dibutuhkan
 - Bahasa Pemrograman Go [Go official website](https://go.dev/)
