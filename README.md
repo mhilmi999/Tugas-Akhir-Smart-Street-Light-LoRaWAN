@@ -5,6 +5,10 @@
 ## International Journal ISITIA 2023
 [See the Conference](https://docs.google.com/presentation/d/11-YCotPrYtim7DABWWCKuuAZa3wxNNcI8QoDBYtIVPg/edit?usp=sharing)
 
+## Certificate 
+[Authors](https://github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/blob/main/ISITIA2023-Hilmi_Authors.pdf)
+[Presenter](https://github.com/mhilmi999/Tugas-Akhir-Smart-Street-Light-LoRaWAN/blob/main/ISITIA2023-Hilmi_Presenter.pdf)
+
 ## Hal-hal yang dibutuhkan
 - Bahasa Pemrograman Go [Go official website](https://go.dev/)
 - Pengetahuan atas [Gin Framework](https://gin-gonic.com/)
